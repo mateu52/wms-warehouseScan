@@ -1,0 +1,6 @@
+@wmsmagazyn_HostAddress = http://localhost:5250
+
+GET {{wmsmagazyn_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
