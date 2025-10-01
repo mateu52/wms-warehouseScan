@@ -57,6 +57,23 @@ namespace wmsmagazyn.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Locations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Lodówka"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Szafka"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Blat"
+                        });
                 });
 
             modelBuilder.Entity("wmsmagazyn.Models.Operation", b =>
@@ -133,6 +150,53 @@ namespace wmsmagazyn.Migrations
                     b.HasIndex("DefaultLocationId");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Barcode = "111111",
+                            DefaultLocationId = 1,
+                            Name = "Mleko",
+                            Price = 3.50m,
+                            Unit = "l"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Barcode = "222222",
+                            DefaultLocationId = 1,
+                            Name = "Szynka",
+                            Price = 25.00m,
+                            Unit = "kg"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Barcode = "333333",
+                            DefaultLocationId = 3,
+                            Name = "Jabłka",
+                            Price = 4.00m,
+                            Unit = "kg"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Barcode = "444444",
+                            DefaultLocationId = 2,
+                            Name = "Chleb",
+                            Price = 5.00m,
+                            Unit = "szt"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Barcode = "555555",
+                            DefaultLocationId = 2,
+                            Name = "Płatki",
+                            Price = 8.00m,
+                            Unit = "paczka"
+                        });
                 });
 
             modelBuilder.Entity("wmsmagazyn.Models.User", b =>
@@ -158,6 +222,29 @@ namespace wmsmagazyn.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Mateusz",
+                            Role = "Kierownik",
+                            Surname = "Walter"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Adam",
+                            Role = "Magazynier",
+                            Surname = "Kowalski"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Jarek",
+                            Role = "Magazynier",
+                            Surname = "Wiśniewski"
+                        });
                 });
 
             modelBuilder.Entity("wmsmagazyn.Models.Operation", b =>
