@@ -4,10 +4,12 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace wmsmagazyn.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class SeedData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -115,6 +117,38 @@ namespace wmsmagazyn.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Locations",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Lodówka" },
+                    { 2, "Szafka" },
+                    { 3, "Blat" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Name", "Role", "Surname" },
+                values: new object[,]
+                {
+                    { 1, "Mateusz", "Kierownik", "Walter" },
+                    { 2, "Adam", "Magazynier", "Kowalski" },
+                    { 3, "Jarek", "Magazynier", "Wiśniewski" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "Id", "Barcode", "DefaultLocationId", "Name", "Price", "Unit" },
+                values: new object[,]
+                {
+                    { 1, "111111", 1, "Mleko", 3.50m, "l" },
+                    { 2, "222222", 1, "Szynka", 25.00m, "kg" },
+                    { 3, "333333", 3, "Jabłka", 4.00m, "kg" },
+                    { 4, "444444", 2, "Chleb", 5.00m, "szt" },
+                    { 5, "555555", 2, "Płatki", 8.00m, "paczka" }
                 });
 
             migrationBuilder.CreateIndex(
