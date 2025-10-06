@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using wmsmagazyn.Data;
 using wmsmagazyn.Models;
 
@@ -17,7 +18,9 @@ namespace wmsmagazyn.Controllers
             [HttpGet]
             public IActionResult GetAll()
             {
-                var products = _context.Products.ToList();
+                var products = _context.Products
+                    .Include(p => p.DefaultLocation)
+                    .ToList();
                 return Ok(products);
             }
             [HttpGet("{id}")]
