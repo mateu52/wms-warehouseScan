@@ -46,11 +46,13 @@ namespace wmsmagazyn.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateLocation(int id, Location location)
         {
-            if (id != location.Id) return BadRequest();
+            var existing = _context.Locations.Find(id);
+            if (existing == null)
+                return NotFound();
 
-            _context.Entry(location).State = EntityState.Modified;
+            existing.Name = location.Name;
+
             _context.SaveChanges();
-
             return NoContent();
         }
 

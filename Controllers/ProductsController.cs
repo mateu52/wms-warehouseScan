@@ -47,10 +47,6 @@ namespace wmsmagazyn.Controllers
             [HttpPut("{id}")]
             public IActionResult Update(int id, Product product)
             {
-                if (id != product.Id || !ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
                 var existingProduct = _context.Products.Find(id);
                 if (existingProduct == null)
                 {

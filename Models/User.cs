@@ -1,4 +1,6 @@
-﻿namespace wmsmagazyn.Models
+﻿using System.Text.Json.Serialization;
+
+namespace wmsmagazyn.Models
 {
     public class User
     {
@@ -7,5 +9,8 @@
         public string Surname { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty; // "Magazynier", "Kierownik" lub "Administrator"
 
+        // relacja - produkty dodane przez użytkownika
+        [JsonIgnore]   // <- ignorujemy przy serializacji
+        public List<Product>? Products { get; set; }
     }
 }
