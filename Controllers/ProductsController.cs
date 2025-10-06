@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using wmsmagazyn.Data;
 using wmsmagazyn.Models;
@@ -34,15 +36,16 @@ namespace wmsmagazyn.Controllers
                 return Ok(product);
             }
             [HttpPost]
-            public IActionResult Create(Product product)
+            [Authorize]
+            public async Task<ActionResult<Product>> Create(Product product)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
+                // Pobranie UserId z tokena
+                var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                product.CreatedByUserId = userId;
+
                 _context.Products.Add(product);
-                _context.SaveChanges();
-                return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
+                await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
             }
             [HttpPut("{id}")]
             public IActionResult Update(int id, Product product)
