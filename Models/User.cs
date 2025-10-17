@@ -8,6 +8,8 @@ namespace wmsmagazyn.Models
         public string Name { get; set; } = string.Empty;
         public string Surname { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty; // "Magazynier", "Kierownik" lub "Administrator"
+        public string Password { get; set; } = string.Empty; 
+
 
         // relacja - produkty dodane przez użytkownika
         [JsonIgnore]   // <- ignorujemy przy serializacji

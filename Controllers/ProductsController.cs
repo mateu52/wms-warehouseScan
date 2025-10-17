@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using wmsmagazyn.Data;
+using wmsmagazyn.Dto;
 using wmsmagazyn.Models;
 
 namespace wmsmagazyn.Controllers
@@ -10,7 +11,8 @@ namespace wmsmagazyn.Controllers
     
         [ApiController]
         [Route("api/[controller]")]
-        public class ProductsController : ControllerBase
+        [Authorize]
+    public class ProductsController : ControllerBase
         {
             private readonly AppDbContext _context;
             public ProductsController(AppDbContext context)
@@ -18,12 +20,29 @@ namespace wmsmagazyn.Controllers
                 _context = context;
             }
             [HttpGet]
-            public IActionResult GetAll()
+            public async Task<ActionResult<IEnumerable<ProductWithUserDto>>> GetProducts()
             {
-                var products = _context.Products
-                    .Include(p => p.DefaultLocation)
-                    .ToList();
-                return Ok(products);
+                var products = await _context.Products
+                    .Include(p => p.CreatedByUser)
+                    .ToListAsync();
+
+                var result = products.Select(p => new ProductWithUserDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Barcode = p.Barcode,
+                    Unit = p.Unit,
+                    Price = p.Price,
+                    CreatedByUser = p.CreatedByUser == null ? null : new UserDto
+                    {
+                        Id = p.CreatedByUser.Id,
+                        Name = p.CreatedByUser.Name,
+                        Surname = p.CreatedByUser.Surname,
+                        Role = p.CreatedByUser.Role
+                    }
+                }).ToList();
+
+                return Ok(result);
             }
             [HttpGet("{id}")]
             public IActionResult GetById(int id)
@@ -40,12 +59,17 @@ namespace wmsmagazyn.Controllers
             public async Task<ActionResult<Product>> Create(Product product)
             {
                 // Pobranie UserId z tokena
-                var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+                if (userIdClaim == null || string.IsNullOrEmpty(userIdClaim.Value))
+                {
+                    return Unauthorized("Brak identyfikatora użytkownika w tokenie.");
+                }
+                var userId = int.Parse(userIdClaim.Value);
                 product.CreatedByUserId = userId;
 
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
+                return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
             }
             [HttpPut("{id}")]
             public IActionResult Update(int id, Product product)
