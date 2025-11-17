@@ -56,7 +56,7 @@ namespace wmsmagazyn.Controllers
             }
             [HttpPost]
             [Authorize]
-            public async Task<ActionResult<Product>> Create(Product product)
+            public async Task<ActionResult<CreateProductDto>> Create(CreateProductDto dto)
             {
                 // Pobranie UserId z tokena
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -65,12 +65,41 @@ namespace wmsmagazyn.Controllers
                     return Unauthorized("Brak identyfikatora użytkownika w tokenie.");
                 }
                 var userId = int.Parse(userIdClaim.Value);
-                product.CreatedByUserId = userId;
+                // Mapowanie DTO -> Model
+                var product = new Product
+                {
+                    Name = dto.Name,
+                    Price = dto.Price,
+                    Barcode = dto.Barcode,
+                    Unit = dto.Unit,
+                    CreatedByUserId = userId
+                };
 
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
-            }
+
+                // Pobranie usera do DTO
+                var user = await _context.Users.FindAsync(userId);
+
+                var result = new ProductWithUserDto
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Barcode = product.Barcode,
+                    Unit = product.Unit,
+                    Price = product.Price,
+
+                    CreatedByUser = product.CreatedByUser == null
+                    ? null
+                    : new UserDto
+                    {
+                        Id = product.CreatedByUser.Id,
+                        Name = product.CreatedByUser.Name
+        }
+                };
+
+                return CreatedAtAction(nameof(GetById), new { id = product.Id }, result);
+        }
             [HttpPut("{id}")]
             public IActionResult Update(int id, Product product)
             {
