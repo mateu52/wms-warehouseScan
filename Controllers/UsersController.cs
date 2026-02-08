@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using wmsmagazyn.Data;
 using wmsmagazyn.Models;
 
@@ -6,6 +7,7 @@ namespace wmsmagazyn.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class UsersController : ControllerBase
     {
         private readonly AppDbContext _context;

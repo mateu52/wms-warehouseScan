@@ -11,7 +11,7 @@ namespace wmsmagazyn.Controllers
     
         [ApiController]
         [Route("api/[controller]")]
-        [Authorize]
+        //[Authorize]
     public class ProductsController : ControllerBase
         {
             private readonly AppDbContext _context;

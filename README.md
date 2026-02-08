@@ -12,3 +12,6 @@ Uprawnienia użytkownika: jakie operacje może wykonywać np. „Przyjęcie,Wyda
 
 ⚙️ Operation
 Rejestr wykonanych działań: typ operacji, kto ją wykonał, kiedy
+
+auth:
+podajesz name/password do uzyskania bearer tokena, który jest wymagany do dalszych operacji
