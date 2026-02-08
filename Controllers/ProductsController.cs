@@ -19,6 +19,12 @@ namespace wmsmagazyn.Controllers
             {
                 _context = context;
             }
+            [HttpGet("ping")]
+            public IActionResult Ping()
+            {
+                return Ok(new { message = "Backend działa 💪" });
+            }
+
             [HttpGet]
             public async Task<ActionResult<IEnumerable<ProductWithUserDto>>> GetProducts()
             {
