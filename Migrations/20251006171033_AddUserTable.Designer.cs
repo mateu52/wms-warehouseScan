@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using wmsmagazyn.Data;
@@ -11,9 +12,11 @@ using wmsmagazyn.Data;
 namespace wmsmagazyn.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251006171033_AddUserTable")]
+    partial class AddUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,10 +219,6 @@ namespace wmsmagazyn.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("text");
@@ -237,7 +236,6 @@ namespace wmsmagazyn.Migrations
                         {
                             Id = 1,
                             Name = "Mateusz",
-                            Password = "",
                             Role = "Kierownik",
                             Surname = "Walter"
                         },
@@ -245,7 +243,6 @@ namespace wmsmagazyn.Migrations
                         {
                             Id = 2,
                             Name = "Adam",
-                            Password = "",
                             Role = "Magazynier",
                             Surname = "Kowalski"
                         },
@@ -253,7 +250,6 @@ namespace wmsmagazyn.Migrations
                         {
                             Id = 3,
                             Name = "Jarek",
-                            Password = "",
                             Role = "Magazynier",
                             Surname = "Wiśniewski"
                         });
