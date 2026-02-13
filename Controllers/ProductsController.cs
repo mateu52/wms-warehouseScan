@@ -100,8 +100,11 @@ namespace wmsmagazyn.Controllers
                     : new UserDto
                     {
                         Id = product.CreatedByUser.Id,
-                        Name = product.CreatedByUser.Name
-        }
+                        Name = product.CreatedByUser.Name,
+                        Surname = product.CreatedByUser.Surname,
+                        Role = product.CreatedByUser.Role
+
+                    }
                 };
 
                 return CreatedAtAction(nameof(GetById), new { id = product.Id }, result);
