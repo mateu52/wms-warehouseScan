@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using wmsmagazyn.Data;
-using wmsmagazyn.Dto;
 using wmsmagazyn.Models;
+using wmsmagazyn.Dto;
 
 namespace wmsmagazyn.Controllers
 {
@@ -17,32 +17,64 @@ namespace wmsmagazyn.Controllers
             _context = context;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddStock(CreateStockDto dto)
+        [HttpPost("in")]
+        public async Task<IActionResult> AddStockIn(CreateStockMovementDto dto)
         {
-            var stock = new Stock
+            var movement = new StockMovement
             {
                 ProductId = dto.ProductId,
                 LocationId = dto.LocationId,
-                Quantity = dto.Quantity
+                Quantity = dto.Quantity,
+                Type = MovementType.IN,
+                CreatedAt = DateTime.UtcNow
             };
 
-            _context.Stocks.Add(stock);
+            _context.StockMovements.Add(movement);
             await _context.SaveChangesAsync();
 
-            return Ok(stock);
+            return Ok();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetStocks()
+        [HttpPost("out")]
+        public async Task<IActionResult> AddStockOut(CreateStockMovementDto dto)
         {
-            var stocks = await _context.Stocks
-                .Include(s => s.Product)
-                .Include(s => s.Location)
-                .ToListAsync();
+            var currentStock = await _context.StockMovements
+                .Where(x => x.ProductId == dto.ProductId &&
+                            x.LocationId == dto.LocationId)
+                .SumAsync(x => x.Type == MovementType.IN
+                    ? x.Quantity
+                    : -x.Quantity);
 
-            return Ok(stocks);
+            if (currentStock < dto.Quantity)
+                return BadRequest("Not enough stock");
+
+            var movement = new StockMovement
+            {
+                ProductId = dto.ProductId,
+                LocationId = dto.LocationId,
+                Quantity = dto.Quantity,
+                Type = MovementType.OUT,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.StockMovements.Add(movement);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpGet("{productId}/{locationId}")]
+        public async Task<IActionResult> GetStock(int productId, int locationId)
+        {
+            var total = await _context.StockMovements
+                .Where(x => x.ProductId == productId &&
+                            x.LocationId == locationId)
+                .SumAsync(x => x.Type == MovementType.IN
+                    ? x.Quantity
+                    : -x.Quantity);
+
+            return Ok(total);
         }
     }
-
 }
+

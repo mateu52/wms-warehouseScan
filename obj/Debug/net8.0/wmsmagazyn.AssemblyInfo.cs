@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("wmsmagazyn")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e8ac625b215e4b9fa39579ddf1f8664569c5f42d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fe83190489ddf839ed2df482dcee80902e39d0b4")]
 [assembly: System.Reflection.AssemblyProductAttribute("wmsmagazyn")]
 [assembly: System.Reflection.AssemblyTitleAttribute("wmsmagazyn")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
