@@ -16,6 +16,31 @@ namespace wmsmagazyn.Controllers
         {
             _context = context;
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAllStockSummary()
+        {
+            var result = await _context.StockMovements
+                .Include(x => x.Product)
+                .Include(x => x.Location)
+                .GroupBy(x => new
+                {
+                    x.ProductId,
+                    ProductName = x.Product.Name,
+                    x.LocationId,
+                    LocationName = x.Location.Name
+                })
+                .Select(g => new StockSummaryDto
+                {
+                    ProductName = g.Key.ProductName,
+                    LocationName = g.Key.LocationName,
+                    Quantity = g.Sum(x => x.Type == MovementType.IN
+                        ? x.Quantity
+                        : -x.Quantity)
+                })
+                .ToListAsync();
+
+            return Ok(result);
+        }
 
         [HttpPost("in")]
         public async Task<IActionResult> AddStockIn(CreateStockMovementDto dto)
@@ -75,6 +100,8 @@ namespace wmsmagazyn.Controllers
 
             return Ok(total);
         }
+        
+
     }
 }
 

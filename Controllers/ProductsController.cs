@@ -76,7 +76,7 @@ namespace wmsmagazyn.Controllers
                 {
                     Name = dto.Name,
                     Price = dto.Price,
-                    Barcode = dto.Barcode,
+                    Barcode = GenerateBarcode(),
                     Unit = dto.Unit,
                     CreatedByUserId = userId
                 };
@@ -137,6 +137,11 @@ namespace wmsmagazyn.Controllers
                 _context.SaveChanges();
                 return NoContent();
             }
+        private string GenerateBarcode()
+        {
+            return DateTime.UtcNow.Ticks.ToString();
         }
-    
+
+    }
+
 }
