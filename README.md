@@ -1,14 +1,10 @@
-﻿# wms-warehouseScan
-🧱Product
-Definicja towaru: nazwa, kod kreskowy, jednostka, cena
+1. Projekt
 
-Opcjonalnie: domyślna lokalizacja
+Warehouse Scan – prosty system do zarządzania magazynem.
 
-📍 Location
-Miejsce w magazynie: np. „Lodówka”, „Regał A1”
+2. Funkcje
 
-🔐 Access
-Uprawnienia użytkownika: jakie operacje może wykonywać np. „Przyjęcie,Wydanie”
+Zarządzanie towarami
 
 ⚙️ Operation
 Rejestr wykonanych działań: typ operacji, kto ją wykonał, kiedy
