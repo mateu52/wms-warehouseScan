@@ -6,14 +6,8 @@ Warehouse Scan – prosty system do zarządzania magazynem.
 
 Zarządzanie towarami
 
-Przechowywanie lokalizacji
+⚙️ Operation
+Rejestr wykonanych działań: typ operacji, kto ją wykonał, kiedy
 
-Rejestracja operacji (przyjęcie / wydanie)
-
-3. Stack technologiczny
-
-C# / .NET 8
-
-Entity Framework / SQL
-
-(docelowo – frontend)
+auth:
+podajesz name/password do uzyskania bearer tokena, który jest wymagany do dalszych operacji

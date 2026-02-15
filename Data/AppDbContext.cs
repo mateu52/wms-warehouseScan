@@ -11,6 +11,8 @@ namespace wmsmagazyn.Data
         public DbSet<Operation> Operations { get; set; }
         public DbSet<Access> Accesses { get; set; }
         public DbSet<Location> Locations { get; set; }
+        public DbSet<StockMovement> StockMovements { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

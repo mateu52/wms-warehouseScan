@@ -16,5 +16,8 @@ namespace wmsmagazyn.Models
         // Opcjonalnie: domyślna lokalizacja przy pierwszym przyjęciu
         public int? DefaultLocationId { get; set; }
         public Location? DefaultLocation { get; set; }
+        public ICollection<StockMovement> StockMovements { get; set; }
+
+
     }
 }

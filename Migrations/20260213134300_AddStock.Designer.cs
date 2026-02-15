@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using wmsmagazyn.Data;
@@ -11,9 +12,11 @@ using wmsmagazyn.Data;
 namespace wmsmagazyn.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260213134300_AddStock")]
+    partial class AddStock
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -204,16 +207,13 @@ namespace wmsmagazyn.Migrations
                         });
                 });
 
-            modelBuilder.Entity("wmsmagazyn.Models.StockMovement", b =>
+            modelBuilder.Entity("wmsmagazyn.Models.Stock", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("LocationId")
                         .HasColumnType("integer");
@@ -224,16 +224,13 @@ namespace wmsmagazyn.Migrations
                     b.Property<decimal>("Quantity")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("LocationId");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("StockMovements");
+                    b.ToTable("Stock");
                 });
 
             modelBuilder.Entity("wmsmagazyn.Models.User", b =>
@@ -337,16 +334,16 @@ namespace wmsmagazyn.Migrations
                     b.Navigation("DefaultLocation");
                 });
 
-            modelBuilder.Entity("wmsmagazyn.Models.StockMovement", b =>
+            modelBuilder.Entity("wmsmagazyn.Models.Stock", b =>
                 {
                     b.HasOne("wmsmagazyn.Models.Location", "Location")
-                        .WithMany("StockMovements")
+                        .WithMany("Stocks")
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("wmsmagazyn.Models.Product", "Product")
-                        .WithMany("StockMovements")
+                        .WithMany("Stocks")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -358,12 +355,12 @@ namespace wmsmagazyn.Migrations
 
             modelBuilder.Entity("wmsmagazyn.Models.Location", b =>
                 {
-                    b.Navigation("StockMovements");
+                    b.Navigation("Stocks");
                 });
 
             modelBuilder.Entity("wmsmagazyn.Models.Product", b =>
                 {
-                    b.Navigation("StockMovements");
+                    b.Navigation("Stocks");
                 });
 
             modelBuilder.Entity("wmsmagazyn.Models.User", b =>

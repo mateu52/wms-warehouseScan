@@ -11,7 +11,7 @@ namespace wmsmagazyn.Controllers
     
         [ApiController]
         [Route("api/[controller]")]
-        [Authorize]
+        //[Authorize]
     public class ProductsController : ControllerBase
         {
             private readonly AppDbContext _context;
@@ -76,7 +76,7 @@ namespace wmsmagazyn.Controllers
                 {
                     Name = dto.Name,
                     Price = dto.Price,
-                    Barcode = dto.Barcode,
+                    Barcode = GenerateBarcode(),
                     Unit = dto.Unit,
                     CreatedByUserId = userId
                 };
@@ -100,8 +100,11 @@ namespace wmsmagazyn.Controllers
                     : new UserDto
                     {
                         Id = product.CreatedByUser.Id,
-                        Name = product.CreatedByUser.Name
-        }
+                        Name = product.CreatedByUser.Name,
+                        Surname = product.CreatedByUser.Surname,
+                        Role = product.CreatedByUser.Role
+
+                    }
                 };
 
                 return CreatedAtAction(nameof(GetById), new { id = product.Id }, result);
@@ -134,6 +137,11 @@ namespace wmsmagazyn.Controllers
                 _context.SaveChanges();
                 return NoContent();
             }
+        private string GenerateBarcode()
+        {
+            return DateTime.UtcNow.Ticks.ToString();
         }
-    
+
+    }
+
 }

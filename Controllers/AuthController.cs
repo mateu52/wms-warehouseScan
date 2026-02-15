@@ -1,16 +1,19 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using wmsmagazyn.Data;
 using wmsmagazyn.Dto;
 using wmsmagazyn.Models;
 
 namespace wmsmagazyn.Controllers
 {
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
@@ -57,5 +60,15 @@ namespace wmsmagazyn.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+    }
+    public static class PasswordHelper
+    {
+        public static string HashPassword(string password)
+        {
+            using var sha = SHA256.Create();
+            var bytes = Encoding.UTF8.GetBytes(password);
+            var hash = sha.ComputeHash(bytes);
+            return Convert.ToBase64String(hash);
+        }
     }
 }

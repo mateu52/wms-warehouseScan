@@ -12,8 +12,6 @@ namespace wmsmagazyn.Dto
         [Range(0.01, 100000, ErrorMessage = "Cena musi być większa niż 0")]
         public decimal Price { get; set; }
 
-        [Required(ErrorMessage = "Kod kreskowy jest wymagany")]
-        public string Barcode { get; set; } = null!;
 
         [Required(ErrorMessage = "Jednostka jest wymagana")]
         public string Unit { get; set; } = null!;
