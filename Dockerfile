@@ -17,5 +17,5 @@ COPY --from=build /app/out .
 ENV ASPNETCORE_URLS=http://+:$PORT
 EXPOSE $PORT
 
-ENTRYPOINT ["dotnet", "wms-warehouseScan.dll"]
+ENTRYPOINT ["dotnet", "wmsmagazyn.dll"]
 
