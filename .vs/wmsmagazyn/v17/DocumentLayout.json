@@ -68,7 +68,7 @@
               "RelativeDocumentMoniker": "Dockerfile",
               "ToolTip": "F:\\wsb\\semestr 2\\programowanie wykl\\programvs\\wmsmagazyn\\wmsmagazyn\\Dockerfile",
               "RelativeToolTip": "Dockerfile",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2026-02-15T12:06:14.855Z",
               "EditorCaption": ""
@@ -143,8 +143,7 @@
               "RelativeToolTip": "Dto\\CreateProductDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-15T09:52:36.233Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-15T09:52:36.233Z"
             },
             {
               "$type": "Document",
