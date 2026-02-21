@@ -100,6 +100,9 @@ var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
 try
 {
+    var rawConn = builder.Configuration.GetConnectionString("AppDb") ?? "";
+    var maskedConn = System.Text.RegularExpressions.Regex.Replace(rawConn, @"Password=[^;]*", "Password=****");
+    Console.WriteLine($"🔎 Trying DB connection: {maskedConn}");
     // 🔎 Test połączenia z bazą
     if (await db.Database.CanConnectAsync())
     {
