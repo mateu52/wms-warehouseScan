@@ -95,9 +95,29 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-using (var scope = app.Services.CreateScope())
+using var scope = app.Services.CreateScope();
+var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+try
 {
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
+    // 🔎 Test połączenia z bazą
+    if (await db.Database.CanConnectAsync())
+    {
+        Console.WriteLine("✅ DB connection successful!");
+    }
+    else
+    {
+        Console.WriteLine("❌ DB connection FAILED!");
+        throw new Exception("Nie udało się połączyć z bazą danych.");
+    }
 }
+catch (Exception ex)
+{
+    Console.WriteLine("❌ Exception during DB connect:");
+    Console.WriteLine(ex.Message);
+    throw;
+}
+
+// Dopiero teraz migracje
+db.Database.Migrate();
 app.Run();
