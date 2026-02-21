@@ -7,15 +7,15 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
+Console.WriteLine("✅ Builder created successfully");
 // Add services to the container.
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
         policy => policy
+            .WithOrigins("https://wms-warehousescan-frontend.onrender.com")
             .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowAnyOrigin());
+            .AllowAnyMethod());
 });
 
 builder.Services.AddControllers();
@@ -81,11 +81,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 var app = builder.Build();
-
+Console.WriteLine("✅ App built successfully");
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
-    app.UseSwagger();
+app.UseSwagger();
     app.UseSwaggerUI();
 //}
 
