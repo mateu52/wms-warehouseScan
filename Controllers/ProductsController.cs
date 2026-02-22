@@ -61,7 +61,7 @@ namespace wmsmagazyn.Controllers
                 return Ok(product);
             }
             [HttpPost]
-            [Authorize]
+            //[Authorize]
             public async Task<ActionResult<CreateProductDto>> Create(CreateProductDto dto)
             {
                 // Pobranie UserId z tokena
