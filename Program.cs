@@ -68,59 +68,71 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = jwtIssuer,
         ValidAudience = jwtAudience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!))
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(jwtKey ?? throw new Exception("JWT Key missing"))
+        )
     };
 });
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-//builder.Services.AddDbContext<AppDbContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// ================= DB =================
+var connectionString = builder.Configuration.GetConnectionString("AppDb");
+
+if (string.IsNullOrEmpty(connectionString))
+{
+    Console.WriteLine("❌ Connection string missing!");
+}
+else
+{
+    Console.WriteLine("✅ Connection string loaded from ENV");
+}
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("AppDb")));
-
+    options.UseNpgsql(connectionString));
 
 var app = builder.Build();
-Console.WriteLine("✅ App built successfully");
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-app.UseSwagger();
-    app.UseSwaggerUI();
-//}
 
-//app.UseHttpsRedirection();
+Console.WriteLine("✅ App built successfully");
+
+// ================= PORT BINDING FOR RENDER =================
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+app.Urls.Add($"http://+:{port}");
+Console.WriteLine($"🌍 Listening on port {port}");
+
+// ================= Middleware =================
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseCors("AllowFrontend");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-using var scope = app.Services.CreateScope();
-var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-try
+// ================= DB CHECK (SAFE) =================
+using (var scope = app.Services.CreateScope())
 {
-    var rawConn = builder.Configuration.GetConnectionString("AppDb") ?? "";
-    var maskedConn = System.Text.RegularExpressions.Regex.Replace(rawConn, @"Password=[^;]*", "Password=****");
-    Console.WriteLine($"🔎 Trying DB connection: {maskedConn}");
-    // 🔎 Test połączenia z bazą
-    if (await db.Database.CanConnectAsync())
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    try
     {
-        Console.WriteLine("✅ DB connection successful!");
+        if (await db.Database.CanConnectAsync())
+        {
+            Console.WriteLine("✅ DB connection successful!");
+            db.Database.Migrate();
+            Console.WriteLine("✅ Migrations applied");
+        }
+        else
+        {
+            Console.WriteLine("❌ Cannot connect to DB (service will still run)");
+        }
     }
-    else
+    catch (Exception ex)
     {
-        Console.WriteLine("❌ DB connection FAILED!");
-        throw new Exception("Nie udało się połączyć z bazą danych.");
+        Console.WriteLine("❌ DB connection error:");
+        Console.WriteLine(ex.Message);
+        // NIE crashujemy aplikacji
     }
 }
-catch (Exception ex)
-{
-    Console.WriteLine("❌ Exception during DB connect:");
-    Console.WriteLine(ex.Message);
-    throw;
-}
 
-// Dopiero teraz migracje
-db.Database.Migrate();
 app.Run();
